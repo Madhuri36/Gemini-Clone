@@ -1,0 +1,42 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Logs
+logs/
+*.log
+
+# Environment Variables
+.env
+.env.*
+.env.local
+
+# Build Files
+dist/
+build/
+out/
+
+# TypeScript
+*.tsbuildinfo
+
+# Editor/IDE Files
+.vscode/
+.idea/
+.DS_Store
+*.swp
+
+# Coverage Reports
+coverage/
+*.lcov
+
+# Misc
+*.bak
+*.tmp
+*.cache
+
+# Dependency lock files (optional – only if you don't want to track them)
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
