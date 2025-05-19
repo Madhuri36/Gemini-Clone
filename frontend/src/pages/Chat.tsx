@@ -13,7 +13,7 @@ const ChatPage = () => {
   }, [isSidebarOpen]);
 
   return (
-    <div className="flex flex-col min-h-screen w-full overflow-y-auto">
+    <div className="flex flex-col min-h-screen w-full overflow-y-auto bg-[var(--bg-page)]">
       {/* Main content container that starts below the header */}
       <div className="flex w-full pt-16"> {/* Assuming header height is 64px (16rem) */}
         {/* Sidebar component with fixed positioning */}

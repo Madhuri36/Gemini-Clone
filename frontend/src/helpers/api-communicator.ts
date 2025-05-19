@@ -40,7 +40,6 @@ export const checkAuthStatus = async () => {
 };
 
 
-
 export const sendPrompt = async (prompt: string): Promise<string> => {
   try {
     const response = await axios.post("http://localhost:5000/api/v1/chats", { prompt },{ withCredentials: true });

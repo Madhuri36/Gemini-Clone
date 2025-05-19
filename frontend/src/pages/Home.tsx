@@ -37,7 +37,7 @@ const Home = () => {
 
   return (
     <div
-      className="min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 py-12 pt-24 sm:pt-28 md:pt-32"
+      className="min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 py-12 pt-24 sm:pt-28 md:pt-32 "
       style={{ backgroundColor: "var(--bg-page)" }}
     >
       <div className="max-w-3xl text-center">
