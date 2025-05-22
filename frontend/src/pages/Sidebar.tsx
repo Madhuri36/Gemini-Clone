@@ -6,9 +6,12 @@ import {
   FaQuestionCircle,
   FaChartLine,
   FaCog,
-  FaTrash
+  FaTrash,
+  FaUserCircle,
 } from "react-icons/fa";
 import { useChat } from "../Context/chatContext";
+import { checkAuthStatus } from "../helpers/api-communicator";
+import { useEffect, useState } from "react";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -16,13 +19,8 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
-  const { 
-    chats, 
-    currentChatId, 
-    createNewChat, 
-    switchToChat, 
-    deleteChat 
-  } = useChat();
+  const { chats, currentChatId, createNewChat, switchToChat, deleteChat } =
+    useChat();
 
   const handleNewChat = () => {
     createNewChat();
@@ -34,26 +32,44 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
 
   const handleDeleteChat = (e: React.MouseEvent, chatId: string) => {
     e.stopPropagation();
-    if (window.confirm('Are you sure you want to delete this chat?')) {
+    if (window.confirm("Are you sure you want to delete this chat?")) {
       deleteChat(chatId);
     }
   };
 
   const formatTimestamp = (date: Date) => {
     const now = new Date();
-    const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
-    
+    const diffInHours = Math.floor(
+      (now.getTime() - date.getTime()) / (1000 * 60 * 60)
+    );
+
     if (diffInHours < 1) {
-      return 'Just now';
+      return "Just now";
     } else if (diffInHours < 24) {
-      return `${diffInHours} hour${diffInHours === 1 ? '' : 's'} ago`;
+      return `${diffInHours} hour${diffInHours === 1 ? "" : "s"} ago`;
     } else if (diffInHours < 48) {
-      return 'Yesterday';
+      return "Yesterday";
     } else {
       const days = Math.floor(diffInHours / 24);
-      return `${days} day${days === 1 ? '' : 's'} ago`;
+      return `${days} day${days === 1 ? "" : "s"} ago`;
     }
   };
+
+  const [user, setUser] = useState<{ name: string; email: string } | null>(
+    null
+  );
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const userData = await checkAuthStatus();
+        setUser({ name: userData.name, email: userData.email });
+      } catch (err) {
+        console.error("Failed to fetch user info", err);
+      }
+    };
+    fetchUser();
+  }, []);
 
   return (
     <div
@@ -65,7 +81,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
         backdropFilter: "blur(8px)",
         color: "var(--text-primary)",
         borderRight: "1px solid var(--border-muted)",
-        zIndex: 10
+        zIndex: 10,
       }}
     >
       {/* Menu toggle button */}
@@ -87,7 +103,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
             onClick={handleNewChat}
             className="flex items-center justify-center w-full gap-2 px-4 py-3 rounded-md text-white text-sm font-medium hover:opacity-90 transition-opacity"
             style={{
-              backgroundColor: "var(--btn-primary-bg)"
+              backgroundColor: "var(--btn-primary-bg)",
             }}
           >
             <FaPlus /> New Chat
@@ -97,7 +113,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
             onClick={handleNewChat}
             className="mx-auto flex items-center justify-center w-10 h-10 rounded-full text-white hover:opacity-90 transition-opacity"
             style={{
-              backgroundColor: "var(--btn-primary-bg)"
+              backgroundColor: "var(--btn-primary-bg)",
             }}
             aria-label="New chat"
           >
@@ -110,11 +126,17 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
       <div className="flex-1 overflow-y-auto py-2 hide-scrollbar">
         {isOpen ? (
           <div className="px-3">
-            <h3 className="text-xs uppercase font-medium mb-2 px-2" style={{ color: "var(--text-secondary)" }}>
+            <h3
+              className="text-xs uppercase font-medium mb-2 px-2"
+              style={{ color: "var(--text-secondary)" }}
+            >
               Recent Chats
             </h3>
             {chats.length === 0 ? (
-              <div className="text-sm text-center py-4" style={{ color: "var(--text-secondary)" }}>
+              <div
+                className="text-sm text-center py-4"
+                style={{ color: "var(--text-secondary)" }}
+              >
                 No chats yet
               </div>
             ) : (
@@ -123,15 +145,21 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
                   key={chat.id}
                   onClick={() => handleChatClick(chat.id)}
                   className={`group flex items-center gap-2 p-2 rounded-md cursor-pointer mb-1 hover:bg-[var(--custom-bg-one)] transition-colors ${
-                    currentChatId === chat.id ? 'bg-[var(--custom-bg-one)]' : ''
+                    currentChatId === chat.id ? "bg-[var(--custom-bg-one)]" : ""
                   }`}
                 >
-                  <FaRegCommentAlt className="shrink-0 text-sm" style={{ color: "var(--text-secondary)" }} />
+                  <FaRegCommentAlt
+                    className="shrink-0 text-sm"
+                    style={{ color: "var(--text-secondary)" }}
+                  />
                   <div className="truncate flex-1 min-w-0">
                     <div className="text-sm truncate" title={chat.title}>
                       {chat.title}
                     </div>
-                    <div className="text-xs" style={{ color: "var(--text-secondary)" }}>
+                    <div
+                      className="text-xs"
+                      style={{ color: "var(--text-secondary)" }}
+                    >
                       {formatTimestamp(chat.updatedAt)}
                     </div>
                   </div>
@@ -153,31 +181,25 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
         )}
       </div>
 
-      {/* Bottom section with help, activity, settings */}
-      <div className={`p-3 ${isOpen ? "" : "flex flex-col items-center"}`}>
+      {/* User Profile Section */}
+      <div
+        className="p-3 mt-auto"
+      >
         {isOpen ? (
-          <div className="flex flex-col gap-1">
-            <button className="flex items-center gap-2 p-2 rounded-md text-sm hover:bg-[var(--custom-bg-three)] transition-colors">
-              <FaQuestionCircle /> Help
-            </button>
-            <button className="flex items-center gap-2 p-2 rounded-md text-sm hover:bg-[var(--custom-bg-three)] transition-colors">
-              <FaChartLine /> Activity
-            </button>
-            <button className="flex items-center gap-2 p-2 rounded-md text-sm hover:bg-[var(--custom-bg-three)] transition-colors">
-              <FaCog /> Settings
-            </button>
+          <div className="flex items-center gap-3 cursor-pointer">
+            <FaUserCircle className="text-3xl text-[var(--text-secondary)]" />
+            <div className="flex flex-col truncate">
+              <span className="text-sm font-medium truncate">
+                {user?.name || "Loading..."}
+              </span>
+              <span className="text-xs text-[var(--text-secondary)] truncate">
+                {user?.email || ""}
+              </span>
+            </div>
           </div>
         ) : (
-          <div className="flex flex-col items-center gap-4 py-2">
-            <button className="text-lg hover:bg-[var(--custom-bg-three)] p-2 rounded-full transition-colors" title="Help">
-              <FaQuestionCircle />
-            </button>
-            <button className="text-lg hover:bg-[var(--custom-bg-three)] p-2 rounded-full transition-colors" title="Activity">
-              <FaChartLine />
-            </button>
-            <button className="text-lg hover:bg-[var(--custom-bg-three)] p-2 rounded-full transition-colors" title="Settings">
-              <FaCog />
-            </button>
+          <div className="flex justify-center">
+            <FaUserCircle className="text-2xl text-[var(--text-secondary)]" />
           </div>
         )}
       </div>
