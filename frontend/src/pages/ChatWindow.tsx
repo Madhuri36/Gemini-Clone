@@ -3,88 +3,72 @@ import { useTheme } from "../Context/ThemeProvider";
 import { IoSend, IoImageOutline } from "react-icons/io5";
 import { sendPrompt } from "../helpers/api-communicator";
 import LoadingMessage from "../components/Loading";
-
-interface Message {
-  sender: "user" | "ai";
-  text: string;
-  timestamp: Date;
-}
+import { useChat, Message } from "../Context/chatContext";
 
 const ChatWindow = () => {
-  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const { colorTheme, theme } = useTheme();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const { currentChat, currentChatId, addMessageToCurrentChat, createNewChat } = useChat();
+  const messages = currentChat?.messages || [];
 
   const renderFormattedText = (text: string) => {
-  const parts = text.split(/(\*\*.*?\*\*)/); // Split by **bold**
-  return parts.map((part, index) => {
-    if (/^\*\*(.*)\*\*$/.test(part)) {
-      return <strong key={index}>{part.slice(2, -2)}</strong>; // Remove **
-    }
-    return <span key={index}>{part}</span>;
-  });
-};
-
+    const parts = text.split(/(\*\*.*?\*\*)/);
+    return parts.map((part, index) => (
+      /^\*\*(.*)\*\*$/.test(part)
+        ? <strong key={index}>{part.slice(2, -2)}</strong>
+        : <span key={index}>{part}</span>
+    ));
+  };
 
   const handleSend = async () => {
     if (!input.trim()) return;
 
+    let chatId = currentChatId || createNewChat();
     const userMessage: Message = {
       sender: "user",
       text: input,
       timestamp: new Date(),
     };
 
-    setMessages((prev) => [...prev, userMessage]);
+    addMessageToCurrentChat(userMessage);
     setInput("");
     setLoading(true);
 
     try {
       const aiResponse = await sendPrompt(input);
-
-      const aiMessage: Message = {
+      addMessageToCurrentChat({
         sender: "ai",
         text: aiResponse,
         timestamp: new Date(),
-      };
-
-      setMessages((prev) => [...prev, aiMessage]);
+      });
     } catch (error: any) {
-      const errorMessage: Message = {
+      addMessageToCurrentChat({
         sender: "ai",
         text: `❌ Error: ${error.message}`,
         timestamp: new Date(),
-      };
-      setMessages((prev) => [...prev, errorMessage]);
+      });
     } finally {
       setLoading(false);
     }
   };
 
-  const handleFileUpload = () => {
-    fileInputRef.current?.click();
-  };
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+  const handleFileUpload = () => fileInputRef.current?.click();
+  const scrollToBottom = () => messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
 
   useEffect(() => {
     scrollToBottom();
   }, [messages, loading]);
 
-  const formatTime = (date: Date) => {
-    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-  };
+  const formatTime = (date: Date) => date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 
   return (
     <div className="flex flex-col h-[calc(100vh-4rem)] pt-2 bg-[var(--bg-page)]">
-      {/* Messages area */}
-      <div className="flex-1 overflow-y-auto px-2 pb-4 hide-scrollbar">
+      {/* Messages */}
+      <div className="flex-1 overflow-y-auto px-4 pb-4 hide-scrollbar space-y-2">
         {messages.length === 0 ? (
           <div className="flex items-center justify-center h-full text-[var(--text-secondary)] text-sm">
             Type a message below to begin chatting
@@ -94,31 +78,19 @@ const ChatWindow = () => {
             {messages.map((msg, idx) => (
               <div
                 key={idx}
-                className={`flex px-4 py-1 ${
-                  msg.sender === "user" ? "justify-end" : "justify-start"
-                }`}
+                className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
               >
                 <div
-                  className={`max-w-full sm:max-w-[80%] w-fit px-4 py-2 rounded-2xl break-words whitespace-pre-wrap ${
-                    msg.sender === "user" ? "rounded-tr-sm" : "rounded-tl-sm"
+                  className={`max-w-full sm:max-w-[75%] px-4 py-3 rounded-3xl shadow-md transition-all ${
+                    msg.sender === "user"
+                      ? "bg-gradient-to-r from-[var(--gradient-from)] to-[var(--gradient-to)] text-white rounded-tr-sm"
+                      : "bg-[var(--bg-surface)] text-[var(--text-primary)] border border-[var(--border-muted)] rounded-tl-sm"
                   }`}
-                  style={{
-                    background:
-                      msg.sender === "user"
-                        ? "linear-gradient(to right, var(--gradient-from), var(--gradient-to))"
-                        : "var(--custom-bg-two)",
-                    color: msg.sender === "user" ? "white" : "var(--text-primary)",
-                    wordBreak: "break-word",
-                  }}
                 >
-                  <div className="mb-1">{renderFormattedText(msg.text)}</div>
-                  <div
-                    className={`text-xs ${
-                      msg.sender === "user"
-                        ? "text-white/70"
-                        : "text-[var(--text-secondary)]"
-                    } text-right`}
-                  >
+                  <div className="whitespace-pre-wrap break-words">{renderFormattedText(msg.text)}</div>
+                  <div className={`text-xs mt-2 text-right ${
+                    msg.sender === "user" ? "text-white/70" : "text-[var(--text-secondary)]"
+                  }`}>
                     {formatTime(msg.timestamp)}
                   </div>
                 </div>
@@ -130,9 +102,9 @@ const ChatWindow = () => {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input area */}
+      {/* Input */}
       <div className="p-4">
-        <div className="flex items-center gap-2 bg-[var(--custom-bg-one)] rounded-full px-4 py-2">
+        <div className="flex items-center gap-2 bg-[var(--bg-surface)] border border-[var(--border-muted)] rounded-full px-4 py-2 shadow-lg backdrop-blur-md">
           <input
             type="text"
             value={input}
@@ -142,34 +114,26 @@ const ChatWindow = () => {
             placeholder="Type a message..."
             disabled={loading}
           />
-
-          <input
-            type="file"
-            ref={fileInputRef}
-            className="hidden"
-            accept="image/*"
-          />
+          <input type="file" ref={fileInputRef} className="hidden" accept="image/*" />
           <button
             onClick={handleFileUpload}
-            className="p-2 rounded-full hover:bg-[var(--custom-bg-two)] transition-colors"
+            className="p-2 rounded-full hover:bg-[var(--custom-bg-three)] transition-colors"
             aria-label="Upload image"
           >
             <IoImageOutline size={20} className="text-[var(--text-secondary)]" />
           </button>
-
           <button
             onClick={handleSend}
             disabled={!input.trim() || loading}
             className={`p-2 rounded-full transition-all ${
               !input.trim() || loading
                 ? "opacity-50 cursor-not-allowed"
-                : "hover:opacity-90"
+                : "hover:scale-105"
             }`}
-            aria-label="Send message"
             style={{
-              background:
-                "linear-gradient(to right, var(--gradient-from), var(--gradient-to))",
+              background: "linear-gradient(to right, var(--gradient-from), var(--gradient-to))",
             }}
+            aria-label="Send message"
           >
             <IoSend size={18} className="text-white" />
           </button>

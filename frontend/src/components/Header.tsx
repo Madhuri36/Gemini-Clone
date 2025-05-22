@@ -31,7 +31,7 @@ const Header = () => {
 
     return (
         <header
-            className="sticky top-0 z-50 px-4 py-4 shadow-xl backdrop-blur-lg no-scrollbar"
+            className="sticky top-0 z-50 px-4 py-4 shadow-xl backdrop-blur-lg hide-scrollbar"
             style={{ backgroundColor: "var(--bg-header)" }}
         >
             <div className="flex items-center justify-between">
