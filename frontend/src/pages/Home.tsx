@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 const dynamicWords = ["AI Chatbot", "Code Generator", "Image Creator", "Answer Assistant"];
 
@@ -8,6 +9,7 @@ const Home = () => {
   const [displayedText, setDisplayedText] = useState("");
   const [charIndex, setCharIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const currentWord = dynamicWords[currentWordIndex];
@@ -70,6 +72,7 @@ const Home = () => {
         </p>
         <div className="mt-10 sm:mt-12 flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-6">
           <motion.button
+          onClick={() => navigate("/login")}
             className="px-5 py-2 rounded-md font-semibold text-sm shadow-md hover:shadow-lg transition-all duration-300 focus:outline-none focus:ring-2"
             style={{
               backgroundColor: "var(--accent-primary-bg)",

@@ -6,6 +6,7 @@ import { FaApple, FaMicrosoft } from "react-icons/fa";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
+
 const Signup = () => {
   const auth = userAuth();
   const { theme, colorTheme } = useTheme();
@@ -95,12 +96,12 @@ const Signup = () => {
               <button className="flex items-center justify-center gap-3 p-3 rounded-xl border border-[var(--border-muted)] hover:bg-[var(--custom-bg-one)] transition">
                 <FcGoogle className="text-xl" /> Continue with Google
               </button>
-              <button className="flex items-center justify-center gap-3 p-3 rounded-xl border border-[var(--border-muted)] hover:bg-[var(--custom-bg-one)] transition">
+              {/* <button className="flex items-center justify-center gap-3 p-3 rounded-xl border border-[var(--border-muted)] hover:bg-[var(--custom-bg-one)] transition">
                 <FaMicrosoft className="text-blue-600 text-xl" /> Continue with Microsoft
               </button>
               <button className="flex items-center justify-center gap-3 p-3 rounded-xl border border-[var(--border-muted)] hover:bg-[var(--custom-bg-one)] transition">
                 <FaApple className="text-black dark:text-white text-xl" /> Continue with Apple
-              </button>
+              </button> */}
             </div>
 
             <p className="text-sm text-center text-[var(--text-secondary)]">
