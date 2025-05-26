@@ -6,27 +6,30 @@ import Signup from "./pages/Signup"
 import Chat from "./pages/Chat"
 import NotFound from "./pages/NotFound"
 import { ThemeProvider } from "./Context/ThemeProvider"
-import { userAuth } from "./Context/AuthContext"
+import { AuthProvider } from "./Context/AuthContext"
+import { ChatProvider } from "./Context/chatContext"
 
 
 function App() {
-  console.log(userAuth()?.isLoggedIn);
-  
 
-  return <main>
-    <ThemeProvider>
-    <Header />
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<Signup />} />
-      <Route path="/chat" element={<Chat />} />
-      <Route path="*" element={<NotFound />} />
-    </Routes>
-    </ThemeProvider>
- </main>
-
-  
+  return (
+    <AuthProvider>
+        <ThemeProvider>
+            <ChatProvider>
+                <main>
+                    <Header />
+                    <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/signup" element={<Signup />} />
+                        <Route path="/chat" element={<Chat />} />
+                        <Route path="*" element={<NotFound />} />
+                    </Routes>
+                </main>
+            </ChatProvider>
+        </ThemeProvider>
+    </AuthProvider>
+  )
 }
 
 export default App

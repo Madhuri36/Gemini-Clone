@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "./Sidebar";
 import ChatWindow from "./ChatWindow";
-import { ChatProvider } from "../Context/chatContext";
 
 const ChatPage = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
@@ -14,7 +13,6 @@ const ChatPage = () => {
   }, [isSidebarOpen]);
 
   return (
-    <ChatProvider>
       <div className="flex flex-col min-h-screen w-full overflow-y-auto bg-[var(--bg-page)] hide-scrollbar">
         {/* Main content container that starts below the header */}
         <div className="flex w-full pt-16 hide-scrollbar"> {/* Assuming header height is 64px (16rem) */}
@@ -32,7 +30,6 @@ const ChatPage = () => {
           </main>
         </div>
       </div>
-    </ChatProvider>
   );
 };
 

@@ -5,12 +5,14 @@ import { FcGoogle } from "react-icons/fc";
 import { FaApple, FaMicrosoft } from "react-icons/fa";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { useChat } from "../Context/chatContext.tsx";  // Import useChat
 
 
 const Signup = () => {
   const auth = userAuth();
   const { theme, colorTheme } = useTheme();
   const navigate = useNavigate();
+  const { createNewChat } = useChat(); // Use createNewChat
 
   const [loading, setLoading] = useState(false);
 
@@ -26,9 +28,10 @@ const Signup = () => {
       toast.loading("Creating Account...", { id: "signup" });
       await auth?.signup(name, email, password);
       toast.success("Account Created Successfully", { id: "signup" });
-      setTimeout(() => {
-        navigate("/chat");
-      }, 1000);
+
+      // Create a new chat and navigate to it
+      createNewChat()
+      navigate("/chat"); // Navigate to the chat
     } catch (error) {
       console.error(error);
       toast.error("Signup Failed", { id: "signup" });
