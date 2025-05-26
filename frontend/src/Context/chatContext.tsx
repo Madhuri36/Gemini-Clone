@@ -35,7 +35,7 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const savedChats = localStorage.getItem('chatHistory');
     const savedCurrentChatId = localStorage.getItem('currentChatId');
-    
+
     if (savedChats) {
       const parsedChats = JSON.parse(savedChats).map((chat: any) => ({
         ...chat,
@@ -48,7 +48,7 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
       }));
       setChats(parsedChats);
     }
-    
+
     if (savedCurrentChatId) {
       setCurrentChatId(savedCurrentChatId);
     }
@@ -74,8 +74,8 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
 
   const generateChatTitle = (firstMessage: string) => {
     // Generate a title from the first message (first 50 characters)
-    const title = firstMessage.length > 50 
-      ? firstMessage.substring(0, 50) + '...' 
+    const title = firstMessage.length > 50
+      ? firstMessage.substring(0, 50) + '...'
       : firstMessage;
     return title || 'New Chat';
   };
@@ -106,7 +106,7 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
       if (chat.id === currentChatId) {
         const updatedMessages = [...chat.messages, message];
         let updatedTitle = chat.title;
-        
+
         // Update title if this is the first user message and title is still "New Chat"
         if (chat.title === 'New Chat' && message.sender === 'user' && updatedMessages.length === 1) {
           updatedTitle = generateChatTitle(message.text);
@@ -124,8 +124,8 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const updateChatTitle = (chatId: string, title: string) => {
-    setChats(prev => prev.map(chat => 
-      chat.id === chatId 
+    setChats(prev => prev.map(chat =>
+      chat.id === chatId
         ? { ...chat, title, updatedAt: new Date() }
         : chat
     ));
@@ -135,6 +135,7 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
     setChats(prev => prev.filter(chat => chat.id !== chatId));
     if (currentChatId === chatId) {
       setCurrentChatId(null);
+      createNewChat();  //  Open a new chat when the current chat is deleted
     }
   };
 

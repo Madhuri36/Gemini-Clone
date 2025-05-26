@@ -140,38 +140,50 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
                 No chats yet
               </div>
             ) : (
-              chats.slice(0, 20).map((chat) => (
-                <div
-                  key={chat.id}
-                  onClick={() => handleChatClick(chat.id)}
-                  className={`group flex items-center gap-2 p-2 rounded-md cursor-pointer mb-1 hover:bg-[var(--custom-bg-one)] transition-colors ${
-                    currentChatId === chat.id ? "bg-[var(--custom-bg-one)]" : ""
-                  }`}
-                >
-                  <FaRegCommentAlt
-                    className="shrink-0 text-sm"
-                    style={{ color: "var(--text-secondary)" }}
-                  />
-                  <div className="truncate flex-1 min-w-0">
-                    <div className="text-sm truncate" title={chat.title}>
-                      {chat.title}
-                    </div>
-                    <div
-                      className="text-xs"
-                      style={{ color: "var(--text-secondary)" }}
-                    >
-                      {formatTimestamp(chat.updatedAt)}
-                    </div>
-                  </div>
-                  <button
-                    onClick={(e) => handleDeleteChat(e, chat.id)}
-                    className="opacity-0 group-hover:opacity-100 p-1 rounded hover:bg-red-500/20 transition-all"
-                    aria-label="Delete chat"
+              chats.slice(0, 20).map((chat) => {
+                const hasUserMessage = chat.messages.some(
+                  (msg) => msg.sender === "user"
+                );
+
+                if (!hasUserMessage) {
+                  return null; // Don't render this chat if no user message
+                }
+
+                return (
+                  <div
+                    key={chat.id}
+                    onClick={() => handleChatClick(chat.id)}
+                    className={`group flex items-center gap-2 p-2 rounded-md cursor-pointer mb-1 hover:bg-[var(--custom-bg-one)] transition-colors ${
+                      currentChatId === chat.id
+                        ? "bg-[var(--custom-bg-one)]"
+                        : ""
+                    }`}
                   >
-                    <FaTrash className="text-xs text-red-500" />
-                  </button>
-                </div>
-              ))
+                    <FaRegCommentAlt
+                      className="shrink-0 text-sm"
+                      style={{ color: "var(--text-secondary)" }}
+                    />
+                    <div className="truncate flex-1 min-w-0">
+                      <div className="text-sm truncate" title={chat.title}>
+                        {chat.title}
+                      </div>
+                      <div
+                        className="text-xs"
+                        style={{ color: "var(--text-secondary)" }}
+                      >
+                        {formatTimestamp(chat.updatedAt)}
+                      </div>
+                    </div>
+                    <button
+                      onClick={(e) => handleDeleteChat(e, chat.id)}
+                      className="opacity-0 group-hover:opacity-100 p-1 rounded hover:bg-red-500/20 transition-all"
+                      aria-label="Delete chat"
+                    >
+                      <FaTrash className="text-xs text-red-500" />
+                    </button>
+                  </div>
+                );
+              })
             )}
           </div>
         ) : (
@@ -182,9 +194,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
       </div>
 
       {/* User Profile Section */}
-      <div
-        className="p-3 mt-auto"
-      >
+      <div className="p-3 mt-auto">
         {isOpen ? (
           <div className="flex items-center gap-3 cursor-pointer">
             <FaUserCircle className="text-3xl text-[var(--text-secondary)]" />
