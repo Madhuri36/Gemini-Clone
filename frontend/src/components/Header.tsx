@@ -9,7 +9,7 @@ const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
     const { theme, setTheme } = useTheme();
-    const { isLoggedIn, user, logout } = userAuth() || {};
+    const { isLoggedIn, logout } = userAuth() || {};
     const navigate = useNavigate();
     const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -27,6 +27,15 @@ const Header = () => {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
+    const handleLogout = async () => {
+        try {
+            await logout();
+            navigate("/");
+        } catch (err) {
+            console.error("Logout failed:", err);
+        }
+    };
+
     const iconColor = theme === "dark" ? "text-white" : "text-black";
 
     return (
@@ -37,21 +46,19 @@ const Header = () => {
             <div className="flex items-center justify-between">
                 {/* Logo */}
                 <div className="text-2xl font-bold">
-                <span
-    onClick={() => navigate(isLoggedIn ? "/chat" : "/")}
-    className="cursor-pointer bg-gradient-to-r bg-clip-text text-transparent"
-    style={{
-        backgroundImage: "linear-gradient(to right, var(--gradient-from), var(--gradient-to))",
-    }}
->
-    AI ChatBot
-</span>
-
+                    <span
+                        onClick={() => navigate(isLoggedIn ? "/chat" : "/")}
+                        className="cursor-pointer bg-gradient-to-r bg-clip-text text-transparent"
+                        style={{
+                            backgroundImage: "linear-gradient(to right, var(--gradient-from), var(--gradient-to))",
+                        }}
+                    >
+                        AI ChatBot
+                    </span>
                 </div>
 
                 {/* Desktop Menu */}
                 <div className="hidden md:flex items-center gap-3">
-                    {/* Theme toggle */}
                     <button
                         onClick={toggleTheme}
                         className="p-2 rounded-full"
@@ -63,7 +70,6 @@ const Header = () => {
                         {theme === "dark" ? <FaSun /> : <FaMoon />}
                     </button>
 
-                    {/* Theme Settings */}
                     <div className="relative" ref={dropdownRef}>
                         <button
                             onClick={() => setShowSettings(!showSettings)}
@@ -82,7 +88,6 @@ const Header = () => {
                         )}
                     </div>
 
-                    {/* Auth Buttons */}
                     {isLoggedIn ? (
                         <>
                             <button
@@ -96,10 +101,7 @@ const Header = () => {
                                 Go to Chat
                             </button>
                             <button
-                                onClick={() => {
-                                    logout();
-                                    navigate("/");
-                                }}
+                                onClick={handleLogout}
                                 className="px-4 py-2 rounded-md text-sm font-semibold"
                                 style={{
                                     color: "var(--text-primary)",
@@ -135,7 +137,7 @@ const Header = () => {
                     )}
                 </div>
 
-                {/* Mobile menu toggle */}
+                {/* Mobile Menu Toggle */}
                 <button onClick={() => setIsMenuOpen(!isMenuOpen)} className={`md:hidden ${iconColor}`}>
                     {isMenuOpen ? <FaTimes /> : <FaBars />}
                 </button>
@@ -175,10 +177,7 @@ const Header = () => {
                                 Go to Chat
                             </button>
                             <button
-                                onClick={() => {
-                                    logout();
-                                    navigate("/");
-                                }}
+                                onClick={handleLogout}
                                 className="px-4 py-2 rounded-md"
                                 style={{
                                     color: "var(--text-primary)",

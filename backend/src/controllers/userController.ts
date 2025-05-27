@@ -129,3 +129,24 @@ export const verifyUser = async (
     return res.status(500).json({ message: "ERROR", cause: error.message });
   }
 };
+
+export const logoutUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    res.clearCookie(COOKIE_NAME, {
+      httpOnly: true,
+      domain: "localhost", // Replace with your domain in production
+      path: "/",
+      signed: true,
+    });
+
+    return res.status(200).json({ message: "Logged out successfully" });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "ERROR", cause: error.message });
+  }
+};
+

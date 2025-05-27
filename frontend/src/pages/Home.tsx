@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { userAuth } from "../Context/AuthContext"; // adjust path as needed
 
 const dynamicWords = ["AI Chatbot", "Code Generator", "Image Creator", "Answer Assistant"];
 
@@ -10,6 +11,14 @@ const Home = () => {
   const [charIndex, setCharIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
   const navigate = useNavigate();
+  const auth = userAuth();
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (auth?.isLoggedIn) {
+      navigate("/chat"); // Change "/chat" to your target route
+    }
+  }, [auth?.isLoggedIn, navigate]);
 
   useEffect(() => {
     const currentWord = dynamicWords[currentWordIndex];
@@ -39,7 +48,7 @@ const Home = () => {
 
   return (
     <div
-      className="min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 py-12 pt-24 sm:pt-28 md:pt-32 "
+      className="min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 py-12 pt-24 sm:pt-28 md:pt-32"
       style={{ backgroundColor: "var(--bg-page)" }}
     >
       <div className="max-w-3xl text-center">
@@ -72,7 +81,7 @@ const Home = () => {
         </p>
         <div className="mt-10 sm:mt-12 flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-6">
           <motion.button
-          onClick={() => navigate("/login")}
+            onClick={() => navigate("/login")}
             className="px-5 py-2 rounded-md font-semibold text-sm shadow-md hover:shadow-lg transition-all duration-300 focus:outline-none focus:ring-2"
             style={{
               backgroundColor: "var(--accent-primary-bg)",
