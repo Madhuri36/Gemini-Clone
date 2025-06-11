@@ -9,7 +9,7 @@ config();
 const app = express();
 
 const allowedOrigin = process.env.NODE_ENV === "production"
-  ? "https://your-production-frontend.com"  // replace this
+  ? "https://gemini-clone-ir95.onrender.com"
   : "http://localhost:5173";
 
 // Middleware
