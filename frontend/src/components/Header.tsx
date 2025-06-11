@@ -59,7 +59,7 @@ const Header = () => {
                 "linear-gradient(to right, var(--gradient-from), var(--gradient-to))",
             }}
           >
-            AI ChatBot
+            Infera AI
           </span>
         </div>
 
