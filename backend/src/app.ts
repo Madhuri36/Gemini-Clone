@@ -32,21 +32,25 @@ app.use(cors({
 
 app.use(express.json());
 app.use(cookieParser(process.env.COOKIE_SECRET));
+
 if (process.env.NODE_ENV !== "production") {
   app.use(morgan("dev"));
 }
 
-// === API routes ===
-app.use("/api/v1", appRouter);
-
-// === Serve frontend ===
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Serve static files from frontend/dist
-app.use(express.static(path.join(__dirname, "frontend", "dist")));
+// === API routes ===
+app.use("/api/v1", appRouter);
 
-// Fallback to index.html for React Router
+// === Serve frontend static files ===
+// Ensure this points to your actual React build folder
+app.use(express.static(path.join(__dirname, "frontend", "dist"), {
+  maxAge: 0, // Disable caching during development/production if needed
+}));
+
+// === Fallback to index.html for React Router ===
+// This MUST come after all other route handlers
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"));
 });
