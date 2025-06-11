@@ -1,15 +1,13 @@
 import { useState, useRef, useEffect } from "react";
-import { useTheme } from "../Context/ThemeProvider";
 import { IoSend, IoImageOutline, IoChevronDown } from "react-icons/io5";
 import { sendPrompt } from "../helpers/api-communicator";
 import LoadingMessage from "../components/Loading";
-import { useChat, Message } from "../Context/chatContext";
+import { useChat, type Message } from "../Context/chatContext";
 
 const ChatWindow = () => {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const { colorTheme, theme } = useTheme();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -55,7 +53,7 @@ const ChatWindow = () => {
     setLoading(false);
   };
 
-  const handleTextGeneration = async (chatId: string, userMessage: Message) => {
+  const handleTextGeneration = async (_chatId: string, _userMessage: Message) => {
     try {
       const aiResponse = await sendPrompt(input);
       addMessageToCurrentChat({
@@ -72,7 +70,7 @@ const ChatWindow = () => {
     }
   };
 
-  const handleImageGeneration = async (chatId: string, userMessage: Message) => {
+  const handleImageGeneration = async (_chatId: string, _userMessage: Message) => {
     console.log("Image generation requested with prompt:", input);
     addMessageToCurrentChat({
       sender: "ai",
@@ -107,7 +105,7 @@ const ChatWindow = () => {
 
   const formatTime = (date: Date) => date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 
-  const selectedOption = generationOptions.find(opt => opt.value === generationType);
+  // const selectedOption = generationOptions.find(opt => opt.value === generationType);
 
   return (
     <div className="flex flex-col h-[calc(100vh-4rem)] pt-2 bg-[var(--bg-page)]">

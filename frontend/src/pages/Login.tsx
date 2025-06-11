@@ -1,15 +1,12 @@
 import React, { useState } from "react";
 import { userAuth } from "../Context/AuthContext.tsx";
-import { useTheme } from "../Context/ThemeProvider.tsx";
 import { useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
-import { FaApple, FaMicrosoft } from "react-icons/fa";
 import { toast } from "react-hot-toast";
 import { useChat } from "../Context/chatContext.tsx";  // Import useChat
 
 const Login = () => {
   const auth = userAuth();
-  const { theme, colorTheme } = useTheme();
   const navigate = useNavigate();
   const { createNewChat } = useChat(); // Use createNewChat
 
