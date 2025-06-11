@@ -40,16 +40,8 @@ if (process.env.NODE_ENV !== "production") {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// 1. API routes first
+// API routes
 app.use("/api/v1", appRouter);
-
-// 2. Serve frontend static files
-app.use(express.static(path.join(__dirname, "frontend", "dist")));
-
-// 3. For any route that is NOT starting with /api/v1 and NOT a static file, serve index.html
-app.get(/^\/(?!api\/v1).*/, (req, res) => {
-  res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"));
-});
 
 
 export default app;
