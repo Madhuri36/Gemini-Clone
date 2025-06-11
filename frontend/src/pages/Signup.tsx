@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { userAuth } from "../Context/AuthContext.tsx";
 import { useTheme } from "../Context/ThemeProvider.tsx";
 import { FcGoogle } from "react-icons/fc";
-import { FaApple, FaMicrosoft } from "react-icons/fa";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useChat } from "../Context/chatContext.tsx";  // Import useChat

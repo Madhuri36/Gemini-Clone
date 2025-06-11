@@ -1,5 +1,4 @@
 // src/components/ThemeSettings.tsx
-import React from "react";
 import { useTheme } from "../Context/ThemeProvider";
 
 const ThemeSettings = () => {

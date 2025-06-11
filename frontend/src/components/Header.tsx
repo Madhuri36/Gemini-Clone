@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { FaBars, FaTimes, FaSun, FaMoon, FaCog } from "react-icons/fa";
 import { useTheme } from "../Context/ThemeProvider";
 import { userAuth } from "../Context/AuthContext";

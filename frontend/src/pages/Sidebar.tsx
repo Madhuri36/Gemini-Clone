@@ -1,11 +1,8 @@
-import React from "react";
+
 import {
   FaBars,
   FaPlus,
   FaRegCommentAlt,
-  FaQuestionCircle,
-  FaChartLine,
-  FaCog,
   FaTrash,
   FaUserCircle,
 } from "react-icons/fa";

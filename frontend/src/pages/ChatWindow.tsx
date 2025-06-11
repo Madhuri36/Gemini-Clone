@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useTheme } from "../Context/ThemeProvider";
 import { IoSend, IoImageOutline, IoChevronDown } from "react-icons/io5";
 import { sendPrompt } from "../helpers/api-communicator";
