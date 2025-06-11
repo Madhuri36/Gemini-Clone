@@ -6,7 +6,7 @@
   <li>🌗 Light/Dark themes</li>
   <li>🎨 Custom gradient color options</li>
   <li>🔐 User authentication</li>
-  <li>🕓 Recent chat history (via localStorage)</li>
+  <li>🕓 Recent chat history</li>
 </ul>
 
 <hr />
@@ -54,10 +54,9 @@ npm start</code></pre>
 
 <h2>📦 Tech Stack</h2>
 <ul>
-  <li>React, Tailwind CSS</li>
-  <li>Express, MongoDB</li>
+  <li>React, Tailwind CSS, TypeScript</li>
+  <li>Node, Express, MongoDB, Gemini API</li>
   <li>JWT Auth, Context API</li>
-  <li>LocalStorage for history</li>
 </ul>
 
 <hr />
