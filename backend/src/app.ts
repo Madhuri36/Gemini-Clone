@@ -40,19 +40,16 @@ if (process.env.NODE_ENV !== "production") {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// === API routes ===
+// 1. API routes first
 app.use("/api/v1", appRouter);
 
-// === Serve frontend static files ===
-// Ensure this points to your actual React build folder
-app.use(express.static(path.join(__dirname, "frontend", "dist"), {
-  maxAge: 0, // Disable caching during development/production if needed
-}));
+// 2. Serve frontend static files
+app.use(express.static(path.join(__dirname, "frontend", "dist")));
 
-// === Fallback to index.html for React Router ===
-// This MUST come after all other route handlers
-app.get("*", (req, res) => {
+// 3. For any route that is NOT starting with /api/v1 and NOT a static file, serve index.html
+app.get(/^\/(?!api\/v1).*/, (req, res) => {
   res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"));
 });
+
 
 export default app;
