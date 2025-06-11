@@ -4,6 +4,7 @@ import { hash,compare } from "bcrypt";
 import { createToken } from "../utils/tokenManager.js";
 import { COOKIE_NAME } from "../utils/constants.js";
 
+const isProd = process.env.NODE_ENV === "production";
 export const getAllUsers = async (
   req: Request,
   res: Response,
@@ -38,7 +39,7 @@ export const userSignup = async (
     expires.setDate(expires.getDate() + 7);
     res.clearCookie(COOKIE_NAME,{
       httpOnly: true,
-      domain: "localhost", // replace during production
+      secure: isProd,
       expires, 
       signed: true,
       path: "/",
@@ -48,7 +49,7 @@ export const userSignup = async (
     const token= createToken(user._id.toString(), user.email, "7d");
     res.cookie(COOKIE_NAME, token, {
       path: "/",
-      domain: "localhost", // replace during production
+      secure: isProd,
       expires,
       httpOnly: true, 
       signed: true,
@@ -84,7 +85,7 @@ export const userLogin = async (
     expires.setDate(expires.getDate() + 7);
     res.clearCookie(COOKIE_NAME,{
       httpOnly: true,
-      domain: "localhost", // replace during production
+      secure: isProd,
       expires, 
       signed: true,
       path: "/",
@@ -94,7 +95,7 @@ export const userLogin = async (
     const token= createToken(user._id.toString(), user.email, "7d");
     res.cookie(COOKIE_NAME, token, {
       path: "/",
-      domain: "localhost", // replace during production
+      secure: isProd,
       expires,
       httpOnly: true, 
       signed: true,
@@ -138,7 +139,7 @@ export const logoutUser = async (
   try {
     res.clearCookie(COOKIE_NAME, {
       httpOnly: true,
-      domain: "localhost", // Replace with your domain in production
+      secure: isProd,
       path: "/",
       signed: true,
     });

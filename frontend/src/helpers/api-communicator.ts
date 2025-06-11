@@ -1,8 +1,10 @@
 import axios from "axios";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+
 export const loginUser = async (email: string, password: string) => {
   const res = await axios.post(
-    "http://localhost:5000/api/v1/user/login",
+    `${API_BASE_URL}/api/v1/user/login`,
     { email, password },
     { withCredentials: true }
   );
@@ -12,7 +14,7 @@ export const loginUser = async (email: string, password: string) => {
 
 export const signupUser = async (name: string, email: string, password: string) => {
   const res = await axios.post(
-    "http://localhost:5000/api/v1/user/signup",
+    `${API_BASE_URL}/api/v1/user/signup`,
     { name, email, password },
     { withCredentials: true }
   );
@@ -22,7 +24,7 @@ export const signupUser = async (name: string, email: string, password: string) 
 
 export const logoutUser = async () => {
   const res = await axios.post(
-    "http://localhost:5000/api/v1/user/logout",
+    `${API_BASE_URL}/api/v1/user/logout`,
     {},
     { withCredentials: true }
   );
@@ -32,17 +34,20 @@ export const logoutUser = async () => {
 
 export const checkAuthStatus = async () => {
   const res = await axios.get(
-    "http://localhost:5000/api/v1/user/auth-status",
+    `${API_BASE_URL}/api/v1/user/auth-status`,
     { withCredentials: true }
   );
   if (res.status !== 200) throw new Error("Unable to Authenticate");
   return res.data;
 };
 
-
 export const sendPrompt = async (prompt: string): Promise<string> => {
   try {
-    const response = await axios.post("http://localhost:5000/api/v1/chats", { prompt },{ withCredentials: true });
+    const response = await axios.post(
+      `${API_BASE_URL}/api/v1/chats`,
+      { prompt },
+      { withCredentials: true }
+    );
     return response.data.response;
   } catch (error: any) {
     console.error("Frontend API error:", error);
