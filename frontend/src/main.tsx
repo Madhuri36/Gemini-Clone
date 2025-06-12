@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
 import { createTheme, ThemeProvider } from '@mui/material'
-import { BrowserRouter } from 'react-router-dom'
+import { HashRouter } from 'react-router-dom'
 import { AuthProvider } from './Context/AuthContext.tsx'
 import axios from "axios"
 axios.defaults.baseURL = "http://localhost:5000/api/v1";
@@ -20,12 +20,12 @@ const theme= createTheme({
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <AuthProvider>
-    <BrowserRouter>
+    <HashRouter>
     <ThemeProvider theme={theme}>
       <Toaster position='top-right' />
     <App />
     </ThemeProvider>
-    </BrowserRouter>
+    </HashRouter>
     </AuthProvider>
   </StrictMode>,
 )
