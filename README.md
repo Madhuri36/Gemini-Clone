@@ -1,4 +1,4 @@
-<h1>Gemini Clone</h1>
+<h1>Infera AI</h1>
 
 <p>A modern AI chat app inspired by Gemini with:</p>
 <ul>
