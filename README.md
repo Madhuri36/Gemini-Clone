@@ -1,17 +1,17 @@
-<h1>🔮 Gemini Clone</h1>
+<h1>Gemini Clone</h1>
 
 <p>A modern AI chat app inspired by Gemini with:</p>
 <ul>
-  <li>✍️ Text generation</li>
-  <li>🌗 Light/Dark themes</li>
-  <li>🎨 Custom gradient color options</li>
-  <li>🔐 User authentication</li>
-  <li>🕓 Recent chat history</li>
+  <li> Text generation</li>
+  <li> Light/Dark themes</li>
+  <li> Custom gradient color options</li>
+  <li> User authentication</li>
+  <li> Recent chat history</li>
 </ul>
 
 <hr />
 
-<h2>🚀 Features</h2>
+<h2>Features</h2>
 <ul>
   <li><strong>Text Generation</strong> using Gemini API (or similar)</li>
   <li><strong>Auth:</strong> Sign up & login with secure JWT cookies</li>
@@ -52,7 +52,7 @@ npm start</code></pre>
 
 <hr />
 
-<h2>📦 Tech Stack</h2>
+<h2> Tech Stack</h2>
 <ul>
   <li>React, Tailwind CSS, TypeScript</li>
   <li>Node, Express, MongoDB, Gemini API</li>
